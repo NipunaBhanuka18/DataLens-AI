@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: process.env.BUILD_STANDALONE === "true" ? "standalone" : undefined,
+  ...(process.env.BUILD_STANDALONE === "true" ? { output: "standalone" } : {}),
 };
 
 export default nextConfig;
