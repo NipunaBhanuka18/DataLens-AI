@@ -137,8 +137,7 @@ def ds_consultant_node(state: GraphState) -> Dict[str, Any]:
                 return {"consultant_report": report_dict, "trace_logs": final_logs}
             elif isinstance(report, dict):
                 report["assumption_report"] = assumption_report.model_dump()
-                final_logs = existing_logs + node_logs
-                return {"consultant_report": report, "trace_logs": final_logs}
+                return {"consultant_report": report, "trace_logs": node_logs}
         except Exception:
             pass
 
@@ -233,5 +232,5 @@ def ds_consultant_node(state: GraphState) -> Dict[str, Any]:
     )
     return {
         "consultant_report": fallback_report.model_dump(),
-        "trace_logs": existing_logs + node_logs,
+        "trace_logs": node_logs,
     }

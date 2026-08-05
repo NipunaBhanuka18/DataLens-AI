@@ -1,4 +1,5 @@
-from typing import TypedDict, Dict, Any, List, Optional
+import operator
+from typing import TypedDict, Dict, Any, List, Optional, Annotated
 
 
 class GraphState(TypedDict):
@@ -17,6 +18,7 @@ class GraphState(TypedDict):
     target_column: Optional[str]
     target_imbalance_ratio: Optional[Dict[str, float]]
     consultant_report: Optional[Dict[str, Any]]
-    trace_logs: List[str]
+    trace_logs: Annotated[List[str], operator.add]
+
 
 

@@ -36,7 +36,7 @@ def visualization_agent_node(state: GraphState) -> Dict[str, Any]:
                 charts_json = [chart.model_dump() for chart in result.charts]
                 chart_desc = ", ".join(f"{c.chart_type} ({c.x_column})" for c in result.charts[:3])
                 node_logs.append(f"✓ Visualization Agent: LLM selected {len(result.charts)} charts — {chart_desc}.")
-                return {"visualizations": charts_json, "trace_logs": existing_logs + node_logs}
+                return {"visualizations": charts_json, "trace_logs": node_logs}
         except Exception:
             pass
 
@@ -115,4 +115,4 @@ def visualization_agent_node(state: GraphState) -> Dict[str, Any]:
     charts_json = [chart.model_dump() for chart in fallback_charts]
     for c in fallback_charts:
         node_logs.append(f"✓ Visualization Agent: Selected {c.chart_type.upper()} chart — '{c.title}'.")
-    return {"visualizations": charts_json, "trace_logs": existing_logs + node_logs}
+    return {"visualizations": charts_json, "trace_logs": node_logs}

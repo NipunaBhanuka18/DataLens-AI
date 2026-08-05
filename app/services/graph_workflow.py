@@ -12,8 +12,10 @@ from app.agents.ds_consultant import ds_consultant_node
 
 def build_agent_graph() -> Any:
     """
-    Constructs and compiles the LangGraph StateGraph connecting:
-    Quality -> EDA -> Visualization -> Insight -> DS_Consultant.
+    Constructs and compiles the parallel LangGraph StateGraph:
+    - Parallel Fan-Out: START -> quality_agent, eda_agent, visualization_agent, ds_consultant
+    - Fan-In: quality, eda, visualization -> insight_agent -> END
+    - ds_consultant -> END
     """
     workflow = StateGraph(GraphState)
 
@@ -24,12 +26,19 @@ def build_agent_graph() -> Any:
     workflow.add_node("insight_agent", insight_agent_node)
     workflow.add_node("ds_consultant", ds_consultant_node)
 
-    # 2. Add Sequential Edges
+    # 2. Add Parallel Fan-Out Edges from START
     workflow.add_edge(START, "quality_agent")
-    workflow.add_edge("quality_agent", "eda_agent")
-    workflow.add_edge("eda_agent", "visualization_agent")
+    workflow.add_edge(START, "eda_agent")
+    workflow.add_edge(START, "visualization_agent")
+    workflow.add_edge(START, "ds_consultant")
+
+    # 3. Fan-In to Insight Agent once quality, eda, and visualization complete
+    workflow.add_edge("quality_agent", "insight_agent")
+    workflow.add_edge("eda_agent", "insight_agent")
     workflow.add_edge("visualization_agent", "insight_agent")
-    workflow.add_edge("insight_agent", "ds_consultant")
+
+    # 4. Terminal Edges to END
+    workflow.add_edge("insight_agent", END)
     workflow.add_edge("ds_consultant", END)
 
     return workflow.compile()

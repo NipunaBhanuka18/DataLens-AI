@@ -1,24 +1,25 @@
 import axios from "axios";
 import { UploadResponse, AnalysisResponse, InsightsResponse, VisualizationConfig, SimulationResult } from "@/types/api";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1";
+const getBaseUrl = (): string => {
+  let url = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1";
+  url = url.trim().replace(/\/+$/, "");
+  if (!url.endsWith("/api/v1")) {
+    url = `${url}/api/v1`;
+  }
+  return url;
+};
 
 export const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: getBaseUrl(),
+  timeout: 120000, // 2 minutes (accounts for Render free-tier cold starts)
 });
 
 export async function uploadDataset(file: File): Promise<UploadResponse> {
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await apiClient.post<UploadResponse>("/datasets/upload", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await apiClient.post<UploadResponse>("/datasets/upload", formData);
   return response.data;
 }
 

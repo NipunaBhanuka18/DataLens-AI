@@ -12,4 +12,5 @@ htmlcov/
 *.csv
 *.xlsx
 *.xls
+temp_uploads/
 .DS_Store

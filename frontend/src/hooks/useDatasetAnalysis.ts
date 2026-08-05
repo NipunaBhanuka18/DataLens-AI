@@ -50,8 +50,21 @@ export function useDatasetAnalysis() {
     },
     onError: (err: any) => {
       setStep("error");
-      const message =
+      let message =
         err?.response?.data?.detail || err?.message || "An unexpected error occurred during processing.";
+
+      if (message === "Network Error" || err?.code === "ERR_NETWORK") {
+        const isClientInBrowser = typeof window !== "undefined";
+        const isRemoteHost = isClientInBrowser && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1";
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
+
+        if (isRemoteHost && (!apiUrl || apiUrl.includes("127.0.0.1") || apiUrl.includes("localhost"))) {
+          message = "Network Error: Missing NEXT_PUBLIC_API_URL in deployed environment. Please set NEXT_PUBLIC_API_URL in Vercel project environment variables to your deployed FastAPI backend URL (e.g. https://your-backend.up.railway.app/api/v1).";
+        } else {
+          message = "Network Error: Could not connect to backend server. Please verify backend service is running and CORS (ALLOWED_ORIGINS) is properly configured.";
+        }
+      }
+
       setError(message);
     },
   });

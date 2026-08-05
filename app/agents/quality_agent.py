@@ -74,7 +74,7 @@ def quality_agent_node(state: GraphState) -> Dict[str, Any]:
         try:
             response = llm.invoke(prompt)
             report = response.content if hasattr(response, "content") else str(response)
-            return {"quality_report": report, "trace_logs": existing_logs + node_logs}
+            return {"quality_report": report, "trace_logs": node_logs}
         except Exception:
             pass
 
@@ -110,4 +110,4 @@ def quality_agent_node(state: GraphState) -> Dict[str, Any]:
             bullets.append("• Completeness: Excellent data completeness with zero missing values.")
 
     fallback_report = "\n".join(bullets)
-    return {"quality_report": fallback_report, "trace_logs": existing_logs + node_logs}
+    return {"quality_report": fallback_report, "trace_logs": node_logs}

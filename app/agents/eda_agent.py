@@ -76,7 +76,7 @@ def eda_agent_node(state: GraphState) -> Dict[str, Any]:
             response = llm.invoke(prompt)
             findings = response.content if hasattr(response, "content") else str(response)
             node_logs.append(f"✓ EDA Agent: LLM synthesized statistical narrative across {len(stats)} columns.")
-            return {"eda_findings": findings, "trace_logs": existing_logs + node_logs}
+            return {"eda_findings": findings, "trace_logs": node_logs}
         except Exception:
             pass
 
@@ -116,4 +116,4 @@ def eda_agent_node(state: GraphState) -> Dict[str, Any]:
                 )
 
     fallback_findings = "\n".join(findings_list) if findings_list else "No statistical columns found."
-    return {"eda_findings": fallback_findings, "trace_logs": existing_logs + node_logs}
+    return {"eda_findings": fallback_findings, "trace_logs": node_logs}

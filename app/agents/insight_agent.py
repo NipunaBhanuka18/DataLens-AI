@@ -63,7 +63,7 @@ def insight_agent_node(state: GraphState) -> Dict[str, Any]:
             response = llm.invoke(prompt)
             final_insights = response.content if hasattr(response, "content") else str(response)
             node_logs.append("✓ Insight Agent: 4-part Data Story narrative generated successfully.")
-            return {"final_insights": final_insights, "trace_logs": existing_logs + node_logs}
+            return {"final_insights": final_insights, "trace_logs": node_logs}
         except Exception:
             pass
 
@@ -102,4 +102,4 @@ def insight_agent_node(state: GraphState) -> Dict[str, Any]:
             "Leverage these verified baseline metrics to train robust predictive ML models and drive data-informed decisions."
         )
 
-    return {"final_insights": fallback_insights, "trace_logs": existing_logs + node_logs}
+    return {"final_insights": fallback_insights, "trace_logs": node_logs}
