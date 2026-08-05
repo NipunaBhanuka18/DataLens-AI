@@ -1,0 +1,129 @@
+Here is the definitive, master architectural blueprint and feature log for DataLens AI. This document captures the entire scope of the project, from the underlying engine to the front-end user experience, explicitly defining what makes this a highly monetizable, enterprise-grade product.
+
+🚀 DataLens AI: The "First Hour" Data Science Copilot
+Product Identity: An AI-powered decision-support platform designed for the first hour of every machine learning project. It helps engineers and analysts understand, validate, and prepare datasets before model development by combining high-speed deterministic math with agentic AI reasoning.
+
+🟢 1. IMPLEMENTED FEATURES: THE CORE ENGINE & BACKEND
+The Math & Aggregation Layer
+Polars & fastexcel Engine: Sub-second parsing and statistical extraction for massive datasets (500,000+ rows) without RAM bottlenecks.
+
+Advanced Scikit-Learn Heuristics: Calculates Variance Inflation Factor (VIF), Mutual Information (predictive power), and Shapiro-Wilk normality tests.
+
+50,000-Row Sampling Guard: A programmatic threshold that downsamples massive datasets prior to heavy SciPy calculations, strictly enforcing sub-3-second API response times.
+
+Dual Scoring System:
+
+Dataset Health Score (0-100): Evaluates Completeness (40%), Consistency (30%), and Uniqueness (30%).
+
+ML Readiness Score (0-100): Penalizes target leakage, extreme class imbalance, curse of dimensionality, and multicollinearity.
+
+The LangGraph AI Brain
+Multi-Agent Routing (StateGraph): Data flows sequentially through specialized LLM nodes: Quality, EDA, Visualization, and Consultant.
+
+The Data Story: The Insight Agent bypasses bullet points to generate a 4-part narrative: The Data Quality Reality → The Core Pattern → The 'Why' (Hypothesis) → Business Impact.
+
+Chart Justification: The Visualization Agent utilizes strict JSON schemas to actively explain why it selected a specific Plotly chart (e.g., "Boxplot selected to highlight 3-sigma outliers in salary data").
+
+Dynamic AI Personas: Instantly switches the AI's tone without re-running backend math. Modes: Professional, Executive (jargon-free), and Roast Mode (ruthlessly mocking poor data hygiene).
+
+Deterministic Fallback Engine: A rule-based insight generator that activates if the LLM API fails, ensuring UI stability and CI/CD test safety.
+
+🟢 2. IMPLEMENTED FEATURES: FRONTEND & UX (Next.js 15)
+The Diagnostic Dashboard
+Dataset Fingerprint (Hero Card): A high-density top-level component instantly displaying the dataset shape, detected ML problem type, ML readiness score, and highest risk factor.
+
+Evidence-Based Triage (Red/Yellow/Green): Recommendations categorized strictly into Fix Now (Critical), Improve Before Modeling, and Optional Optimizations. Every card includes:
+
+Problem (e.g., "Age contains 18% missing values.")
+
+Evidence (e.g., "18.3% null rate.")
+
+Impact (e.g., "High risk of biased model training.")
+
+Recommendation (e.g., "Median imputation.")
+
+Confidence Badge (High/Medium/Low)
+
+Assumption Checker: Evaluates dataset math against baseline model families (Linear, Tree-Based, Distance-Based), verifying requirements like multicollinearity, scaling needs, and cardinality.
+
+Analysis Trace (Reasoning Timeline): A visual Chain-of-Thought timeline exposing the exact logical steps the LangGraph agents took, building user trust by removing the "black box" effect.
+
+Interactive Tools & Aesthetics
+macOS Glassmorphism UI: Premium aesthetic utilizing backdrop-blur, soft drop-shadows, rounded corners, and Framer Motion stagger-fade transitions.
+
+Chat-to-Chart (Cmd+K Command Palette): A Raycast-style search bar that translates natural language queries into custom Plotly charts instantly rendered in a centered modal.
+
+TanStack Data Preview: An interactive, sortable table that allows users to view the schema and first 50 rows before analysis.
+
+Intelligent Pipeline Steppers: Real-time loading UI communicating exact backend operations (e.g., "Calculating 3-Sigma Outliers...").
+
+One-Click Executive PDF Export: Client-side generation (html2canvas + jspdf) compiling the health score, narrative insights, and high-res chart snapshots into a branded report.
+
+🧠 3. THE CORE PHILOSOPHY (Why It Works)
+The "Zero Raw Data" Strategy
+DataLens AI never lets the LLM read the raw data.
+
+How it works: The deterministic math engine (Polars/Scikit) extracts statistical metadata (e.g., "Income: Skew=2.7, VIF=1.2, Nulls=400"). This tiny summary is injected into strictly typed Pydantic schemas and fed to the LangGraph agents using .with_structured_output().
+
+The Result: Complete data privacy, near-zero LLM token costs, elimination of hallucinations, and the ability to process half a million rows in seconds. The AI acts as a doctor reading an X-ray, not a calculator doing math.
+
+The Stateless Architecture (No Database)
+There is no PostgreSQL or MongoDB attached to this project.
+
+How it works: The backend streams uploads to a temporary /tmp directory, processes them in memory, returns the JSON payload to the React client, and immediately deletes the file.
+
+The Result: Zero data liability (GDPR/SOC2 compliant by default), zero database hosting costs, and effortless deployment to ephemeral serverless containers (Docker/Render/Vercel).
+
+🔵 4. PRO TIER (Future Roadmap)
+Jupyter Notebook Export (.ipynb): A direct pipeline that compiles the Consultant Agent's preprocessing recommendations into a downloadable, executable Python script, saving the user 45 minutes of writing boilerplate scikit-learn code.
+
+Target Feature Leakage Sandbox: An interactive visualization where users can manually drop flagged high-Mutual-Information columns and watch the ML Readiness Score dynamically recalculate in real-time.
+
+Advanced Anomaly Clustering: Utilizing isolation forests or DBSCAN in the backend to automatically cluster and visually highlight complex, multi-dimensional outliers in the frontend Plotly charts.
+
+
+⭐ Decision Simulator
+
+Imagine this.
+
+AI says
+
+Recommendation
+
+Use RobustScaler
+
+User clicks
+
+Why?
+
+The app shows
+
+Current
+
+Skew = 3.1
+
+Outliers = 14%
+
+↓
+
+If StandardScaler
+
+Sensitive to outliers
+
+↓
+
+If RobustScaler
+
+Median/IQR resistant
+
+↓
+
+Expected Effect
+
+Better stability for KNN
+
+This doesn't need model training.
+
+It explains the consequences of decisions.
+
+That's incredibly educational.

@@ -1,0 +1,38 @@
+services:
+  # Backend FastAPI Web Service
+  - type: web
+    name: datalens-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: DEFAULT_LLM_PROVIDER
+        value: google
+      - key: DEFAULT_LLM_MODEL
+        value: gemini-2.5-flash
+      - key: ALLOWED_ORIGINS
+        fromService:
+          type: web
+          name: datalens-frontend
+          property: host
+
+  # Frontend Next.js Web Service
+  - type: web
+    name: datalens-frontend
+    env: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: free
+    region: oregon
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: datalens-backend
+          property: url
+          append: /api/v1
